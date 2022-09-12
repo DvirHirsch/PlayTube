@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { format } from 'timeago.js';
 import Avvvatars from 'avvvatars-react';
-import { httpFetchComment } from '../hooks/requests';
 
 const Container = styled.div`
 	display: flex;
@@ -35,11 +34,6 @@ const Text = styled.span`
 
 const Comment = ({ comment }) => {
 	const [channel, setChannel] = useState({});
-
-	useEffect(() => {
-		httpFetchComment(comment);
-		console.log(comment);
-	}, [comment]);
 
 	return (
 		<Container>

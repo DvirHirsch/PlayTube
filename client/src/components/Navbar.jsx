@@ -10,7 +10,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Upload from './Upload';
 import { Tooltip, IconButton } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import axios from 'axios';
 import Avvvatars from 'avvvatars-react';
+import { useRef } from 'react';
 
 const Container = styled.div`
 	position: sticky;
@@ -90,6 +93,14 @@ const Button = styled.button`
 	}
 `;
 
+const CloseButton = styled.button`
+	border: none;
+	cursor: pointer;
+	background-color: transparent;
+	color: ${({ theme }) => theme.text};
+	font-weight: 200;
+`;
+
 const LogoutButton = styled.button`
 	height: 32px;
 	width: 32px;
@@ -140,7 +151,9 @@ const Navbar = () => {
 	const [open, setOpen] = useState(false);
 	const [q, setQ] = useState('');
 	const { currentUser } = useSelector((state) => state.user);
+	const inputRef = useRef();
 
+	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
 	const handleKeyPress = (e) => {
@@ -150,17 +163,15 @@ const Navbar = () => {
 		}
 	};
 
-	// const handleLogout = async (e) => {
-	// 	e.preventDefault();
-	// 	dispatch(logout());
-	// 	try {
-	// 		const res = await axios.post('/auth/logout');
-	// 		dispatch(logout(res.data));
-	// 		navigate('/');
-	// 	} catch (err) {
-	// 		console.log(err);
-	// 	}
-	// };
+	const handleClear = () => {
+		if (inputRef.current) inputRef.current.value = '';
+	};
+
+	const handleLogout = async (e) => {
+		e.preventDefault();
+		dispatch(logout());
+		navigate('/');
+	};
 
 	return (
 		<>
@@ -178,14 +189,15 @@ const Navbar = () => {
 							placeholder="Search"
 							onChange={(e) => setQ(e.target.value)}
 							onKeyUp={handleKeyPress}
+							ref={inputRef}
 						/>
 						{q !== '' && (
-							<button
+							<CloseButton
 								className="material-symbols-rounded"
-								onClick={() => setQ('')}
+								onClick={handleClear}
 							>
 								close
-							</button>
+							</CloseButton>
 						)}
 
 						<Tooltip title="Search">
@@ -206,7 +218,7 @@ const Navbar = () => {
 							<strong>🥳 {currentUser?.name}</strong>
 							<Tooltip title="Sign out">
 								<LogoutButton>
-									<LogoutOutlinedIcon />
+									<LogoutOutlinedIcon onClick={handleLogout} />
 								</LogoutButton>
 							</Tooltip>
 						</User>

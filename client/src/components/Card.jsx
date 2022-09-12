@@ -1,11 +1,9 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { lazy, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { format } from 'timeago.js';
 import Avvvatars from 'avvvatars-react';
-
-const api = 'http://localhost:4000/api';
 
 const Container = styled.div`
 	width: 20.7em;
@@ -56,7 +54,7 @@ export const Card = ({ type, video }) => {
 
 	useEffect(() => {
 		const fetchChannel = async () => {
-			const res = await axios.get(`${api}/users/find/${video.userId}`);
+			const res = await axios.get(`/users/find/${video.userId}`);
 			setChannel(res.data);
 		};
 		fetchChannel();

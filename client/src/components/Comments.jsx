@@ -6,9 +6,8 @@ import Comment from './Comment';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Avvvatars from 'avvvatars-react';
-import { httpAddComment } from '../hooks/requests';
-
-const api = 'http://localhost:4000/api';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import IconButton from '@mui/material/IconButton';
 
 const Container = styled.div``;
 
@@ -28,6 +27,15 @@ const StyledTextField = styled(TextField)`
 	}
 `;
 
+const CommentWrapper = styled.div`
+	/* display: flex;
+	justify-content: space-between; */
+`;
+
+const StyledDeleteForeverIcon = styled(DeleteForeverIcon)`
+	color: ${({ theme }) => theme.text};
+`;
+
 const HideButtons = styled.div`
 	display: none;
 	width: 100%;
@@ -40,7 +48,6 @@ const Hr = styled.hr`
 	margin: 15px 0px;
 	border: 0.5px solid ${({ theme }) => theme.soft};
 `;
-
 const TotalComments = styled.p`
 	color: ${({ theme }) => theme.text};
 	font-weight: 500;
@@ -50,7 +57,7 @@ const NotSignedIn = styled.p`
 	font-weight: 500;
 `;
 
-const Comments = ({ videoId }) => {
+const Comments = ({ videoId, userId }) => {
 	const { currentUser } = useSelector((state) => state.user);
 	const [comment, setComment] = useState('');
 	const [comments, setComments] = useState([]);
@@ -63,30 +70,34 @@ const Comments = ({ videoId }) => {
 	useEffect(() => {
 		const fetchComments = async () => {
 			try {
-				const res = await axios.get(`${api}/comments/${videoId}`);
+				const res = await axios.get(`/comments/${videoId}`);
 				setComments(res.data);
 			} catch (err) {}
 		};
 		fetchComments();
 	}, [videoId]);
 
-	// 	axios.post('/api/comments/addComment', variables).then((res) => {
-	// 		if (res.data.success) {
-	// 			setComment('');
-	// 			refreshFunc(res.data.result);
-	// 		} else {
-	// 			alert('failed to add comment');
-	// 		}
-	// 	});
-	// };
-
 	//TODO: ADD NEW COMMENT FUNCTIONALITY
-	// handleNewComment = () => {};
+	const handleNewComment = async (desc, videoId) => {
+		const res = await axios.post('/comments/', { desc, videoId });
 
+		setComments([res.data, ...comments]);
+	};
+	const handleDeleteComment = async (commentId, videoId) => {
+		const res = await axios.delete('/comments/', {
+			data: { videoId, commentId },
+		});
+		if (res.status == 200) {
+			const getComments = await axios.get(`/comments/${videoId}`);
+			setComments(getComments.data);
+		}
+	};
 	return (
 		<Container>
 			<br />
 			<TotalComments>251 Comments</TotalComments>
+			<br />
+
 			{currentUser ? (
 				<>
 					<NewComment style={{ display: 'flex' }}>
@@ -99,7 +110,7 @@ const Comments = ({ videoId }) => {
 							InputProps={{
 								inputProps: {
 									style: {
-										color: `${({ theme }) => theme.text}`,
+										color: `#8c8c8c`,
 									},
 								},
 							}}
@@ -128,7 +139,7 @@ const Comments = ({ videoId }) => {
 						</Button>
 						<Button
 							// style={{ width: '20%', height: '52px' }}
-							onClick={() => httpAddComment({})}
+							onClick={() => handleNewComment(textRef.current.value, videoId)}
 						>
 							Submit
 						</Button>
@@ -138,7 +149,20 @@ const Comments = ({ videoId }) => {
 				<NotSignedIn>Sign in to post a comment</NotSignedIn>
 			)}
 			{comments.map((comment) => (
-				<Comment key={comment._id} comment={comment} />
+				<CommentWrapper>
+					<Comment
+						key={comment._id}
+						comment={comment}
+						userId={currentUser?._id}
+					/>
+					<IconButton aria-label="delete">
+						<StyledDeleteForeverIcon
+							onClick={() => {
+								handleDeleteComment(comment._id, comment.videoId);
+							}}
+						></StyledDeleteForeverIcon>
+					</IconButton>
+				</CommentWrapper>
 			))}
 		</Container>
 	);

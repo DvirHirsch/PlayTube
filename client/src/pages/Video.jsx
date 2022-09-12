@@ -16,6 +16,7 @@ import { format } from 'timeago.js';
 import { subscription } from '../redux/userSlice';
 import Recommendation from '../components/Recommendation';
 import Avvvatars from 'avvvatars-react';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
 	display: flex;
@@ -118,38 +119,48 @@ const VideoFrame = styled.video`
 	object-fit: cover;
 `;
 
-const Video = () => {
+const VideoPage = () => {
 	const { currentUser } = useSelector((state) => state.user);
 	const { currentVideo } = useSelector((state) => state.video);
 	const [channel, setChannel] = useState({});
 	// const [commentLists, setCommentLists] = useState([]);
 
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	const path = useLocation().pathname.split('/')[2];
 
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
+				// currentVideo.views++;
 				const videoRes = await axios.get(`/videos/find/${path}`);
 				const channelRes = await axios.get(
 					`/users/find/${videoRes.data.userId}`
 				);
 				setChannel(channelRes.data);
 				dispatch(fetchSuccess(videoRes.data));
-				// console.log(currentVideo);
 			} catch (err) {}
 		};
 		fetchData();
 	}, [path, dispatch]);
 
 	const handleLike = async () => {
-		await axios.put(`/users/like/${currentVideo._id}`);
-		dispatch(like(currentUser?._id));
+		if (!currentUser) {
+			navigate('/signin');
+		} else {
+			await axios.put(`/users/like/${currentVideo._id}`);
+			dispatch(like(currentUser?._id));
+		}
 	};
+
 	const handleDislike = async () => {
-		await axios.put(`/users/dislike/${currentVideo._id}`);
-		dispatch(dislike(currentUser?._id));
+		if (!currentUser) {
+			navigate('/signin');
+		} else {
+			await axios.put(`/users/dislike/${currentVideo._id}`);
+			dispatch(dislike(currentUser?._id));
+		}
 	};
 
 	const handleSub = async () => {
@@ -158,10 +169,6 @@ const Video = () => {
 			: await axios.put(`/users/sub/${channel._id}`);
 		dispatch(subscription(channel._id));
 	};
-
-	// const updateComment = (newComment) => {
-	// 	setCommentLists(commentLists.concat(newComment));
-	// };
 
 	//TODO: DELETE VIDEO FUNCTIONALITY
 
@@ -220,11 +227,11 @@ const Video = () => {
 					)}
 				</Channel>
 				<Hr />
-				<Comments videoId={currentVideo?._id} />
+				<Comments videoId={currentVideo?._id} userId={currentUser?._id} />
 			</Content>
 			<Recommendation tags={currentVideo?.tags} />
 		</Container>
 	);
 };
 
-export default Video;
+export default VideoPage;

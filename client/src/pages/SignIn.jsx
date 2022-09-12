@@ -13,7 +13,7 @@ const Container = styled.div`
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	height: calc(100vh - 56px);
+	height: 100%;
 	color: ${({ theme }) => theme.text};
 `;
 
@@ -53,6 +53,11 @@ const Button = styled.button`
 	cursor: pointer;
 	background-color: ${({ theme }) => theme.soft};
 	color: ${({ theme }) => theme.textSoft};
+	&:hover {
+		color: ${({ theme }) => theme.navIconHover};
+		background-color: ${({ theme }) => theme.navIconBgHover};
+		transition: ease-out 0.35s;
+	}
 `;
 
 const More = styled.div`
