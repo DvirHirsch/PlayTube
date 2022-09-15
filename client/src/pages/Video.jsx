@@ -39,16 +39,20 @@ const Title = styled.h1`
 
 const Details = styled.div`
 	display: flex;
+	flex: 2;
 	align-items: center;
 	justify-content: space-between;
 `;
 
 const Info = styled.span`
 	color: ${({ theme }) => theme.textSoft};
+	flex: 1;
 `;
 
 const Buttons = styled.div`
 	display: flex;
+	margin-left: 70px;
+	flex: 1;
 	gap: 20px;
 	color: ${({ theme }) => theme.text};
 `;

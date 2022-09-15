@@ -16,6 +16,7 @@ const NewComment = styled.div`
 	align-items: center;
 	gap: 10px;
 	margin-top: 30px;
+	flex: 1;
 `;
 
 const StyledTextField = styled(TextField)`
@@ -28,8 +29,9 @@ const StyledTextField = styled(TextField)`
 `;
 
 const CommentWrapper = styled.div`
-	/* display: flex;
-	justify-content: space-between; */
+	display: flex;
+	justify-content: space-between;
+	flex: 2;
 `;
 
 const StyledDeleteForeverIcon = styled(DeleteForeverIcon)`
@@ -83,19 +85,24 @@ const Comments = ({ videoId, userId }) => {
 
 		setComments([res.data, ...comments]);
 	};
+
 	const handleDeleteComment = async (commentId, videoId) => {
-		const res = await axios.delete('/comments/', {
-			data: { videoId, commentId },
-		});
-		if (res.status == 200) {
-			const getComments = await axios.get(`/comments/${videoId}`);
-			setComments(getComments.data);
+		if (currentUser) {
+			const res = await axios.delete('/comments/', {
+				data: { videoId, commentId },
+			});
+
+			if (res.status == 200) {
+				const getComments = await axios.get(`/comments/${videoId}`);
+				setComments(getComments.data);
+			}
 		}
 	};
+
 	return (
 		<Container>
 			<br />
-			<TotalComments>251 Comments</TotalComments>
+			<TotalComments>1 Comments</TotalComments>
 			<br />
 
 			{currentUser ? (

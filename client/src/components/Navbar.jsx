@@ -22,6 +22,7 @@ const Container = styled.div`
 	width: 100%;
 	height: 56px;
 	box-shadow: ${({ theme }) => theme.navShadow} 0px 15px 30px -15px;
+	z-index: 11;
 `;
 
 const Wrapper = styled.div`
@@ -38,12 +39,25 @@ const Logo = styled.div`
 	flex: flex-start;
 	align-items: center;
 	gap: 5px;
+`;
+
+const LogoText = styled.h2`
 	font-weight: bold;
+	font-size: 18px;
 	color: ${({ theme }) => theme.text};
+	@media (max-width: 736px) {
+		display: none;
+	}
 `;
 
 const Img = styled.img`
 	height: 25px;
+`;
+
+const ItemText = styled.text`
+	@media (max-width: 760px) {
+		display: none;
+	}
 `;
 
 const Search = styled.div`
@@ -64,6 +78,13 @@ const Search = styled.div`
 		transition: ease-out 0.25s;
 		background-color: ${({ theme }) => theme.search};
 	}
+
+	@media (max-width: 736px) {
+		width: 60%;
+	}
+	@media (max-width: 490px) {
+		width: 50%;
+	}
 `;
 
 const Input = styled.input`
@@ -75,7 +96,7 @@ const Input = styled.input`
 	color: ${({ theme }) => theme.text};
 `;
 
-const Button = styled.button`
+const SignInButton = styled.button`
 	padding: 5px 15px;
 	background-color: transparent;
 	border: 1px solid #3ea6ff;
@@ -90,6 +111,10 @@ const Button = styled.button`
 		background-color: #3ea6ff;
 		color: ${({ theme }) => theme.text};
 		transition: ease-out 0.25s;
+	}
+
+	@media (max-width: 740px) {
+		display: none;
 	}
 `;
 
@@ -118,6 +143,9 @@ const LogoutButton = styled.button`
 		background-color: ${({ theme }) => theme.navIconBgHover};
 		transition: ease-out 0.35s;
 	}
+	@media (max-width: 880px) {
+		display: none;
+	}
 `;
 
 const UploadButton = styled.button`
@@ -137,6 +165,9 @@ const UploadButton = styled.button`
 		background-color: ${({ theme }) => theme.navIconBgHover};
 		transition: ease-out 0.35s;
 	}
+	@media (max-width: 1008px) {
+		display: none;
+	}
 `;
 
 const User = styled.div`
@@ -145,6 +176,9 @@ const User = styled.div`
 	gap: 10px;
 	font-weight: 500;
 	color: ${({ theme }) => theme.text};
+	/* @media (max-width: 840px) {
+		display: none;
+	} */
 `;
 
 const Navbar = () => {
@@ -163,8 +197,15 @@ const Navbar = () => {
 		}
 	};
 
+	const handleOnFocus = () => {
+		const clostBtn = document.getElementById('closeBtn');
+		clostBtn.style.display = 'block';
+	};
+
 	const handleClear = () => {
+		const clostBtn = document.getElementById('closeBtn');
 		if (inputRef.current) inputRef.current.value = '';
+		clostBtn.style.display = 'none';
 	};
 
 	const handleLogout = async (e) => {
@@ -181,18 +222,21 @@ const Navbar = () => {
 					<Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
 						<Logo>
 							<Img src={logoImg} />
-							PlayTube
+							<LogoText>PlayTube</LogoText>
 						</Logo>
 					</Link>
 					<Search>
 						<Input
 							placeholder="Search"
+							id="header_search"
 							onChange={(e) => setQ(e.target.value)}
 							onKeyUp={handleKeyPress}
+							onFocus={handleOnFocus}
 							ref={inputRef}
 						/>
 						{q !== '' && (
 							<CloseButton
+								id="closeBtn"
 								className="material-symbols-rounded"
 								onClick={handleClear}
 							>
@@ -215,7 +259,7 @@ const Navbar = () => {
 								</UploadButton>
 							</Tooltip>
 							<Avvvatars style="shape" size={32} value={currentUser.img} />
-							<strong>🥳 {currentUser?.name}</strong>
+							<ItemText>🥳 {currentUser?.name}</ItemText>
 							<Tooltip title="Sign out">
 								<LogoutButton>
 									<LogoutOutlinedIcon onClick={handleLogout} />
@@ -225,10 +269,10 @@ const Navbar = () => {
 					) : (
 						<Link to="signin" style={{ textDecoration: 'none' }}>
 							<Tooltip title="Sign in">
-								<Button>
+								<SignInButton>
 									<AccountCircleOutlinedIcon />
 									SIGN IN
-								</Button>
+								</SignInButton>
 							</Tooltip>
 						</Link>
 					)}

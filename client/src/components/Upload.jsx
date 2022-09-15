@@ -8,6 +8,9 @@ import {
 } from 'firebase/storage';
 import app from '../firebase';
 import axios from 'axios';
+import CloseIcon from '@mui/icons-material/Close';
+import IconButton from '@mui/material/IconButton';
+
 import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
@@ -20,6 +23,8 @@ const Container = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	z-index: 12;
+	overflow: hidden;
 `;
 
 const Wrapper = styled.div`
@@ -34,11 +39,10 @@ const Wrapper = styled.div`
 	position: relative;
 `;
 
-const Close = styled.div`
+const StyledIconButton = styled(CloseIcon)`
 	position: absolute;
-	top: 10px;
-	right: 10px;
-	cursor: pointer;
+	right: 5px;
+	color: ${({ theme }) => theme.text};
 `;
 
 const Title = styled.h1`
@@ -69,6 +73,11 @@ const Button = styled.button`
 	cursor: pointer;
 	background-color: ${({ theme }) => theme.soft};
 	color: ${({ theme }) => theme.textSoft};
+	&:hover {
+		color: ${({ theme }) => theme.navIconHover};
+		background-color: ${({ theme }) => theme.navIconBgHover};
+		transition: ease-out 0.35s;
+	}
 `;
 
 const Label = styled.label`
@@ -149,50 +158,54 @@ const Upload = ({ setOpen }) => {
 	};
 
 	return (
-		<Container>
-			<Wrapper>
-				<Close onClick={() => setOpen(false)}>X</Close>
-				<Title>Upload a New Video</Title>
-				<Label>Video:</Label>
-				{videoPerc > 0 ? (
-					'Uploading:' + ' ' + videoPerc + '%'
-				) : (
+		<>
+			<Container>
+				<Wrapper>
+					<IconButton aria-label="close">
+						<StyledIconButton onClick={() => setOpen(false)} />
+					</IconButton>
+					<Title>Upload a New Video</Title>
+					<Label>Video:</Label>
+					{videoPerc > 0 ? (
+						'Uploading:' + ' ' + videoPerc + '%'
+					) : (
+						<Input
+							type="file"
+							accept="video/*"
+							onChange={(e) => setVideo(e.target.files[0])}
+						/>
+					)}
 					<Input
-						type="file"
-						accept="video/*"
-						onChange={(e) => setVideo(e.target.files[0])}
+						type="text"
+						placeholder="Title"
+						name="title"
+						onChange={handleChange}
 					/>
-				)}
-				<Input
-					type="text"
-					placeholder="Title"
-					name="title"
-					onChange={handleChange}
-				/>
-				<Desc
-					placeholder="Description"
-					name="desc"
-					rows={8}
-					onChange={handleChange}
-				/>
-				<Input
-					type="text"
-					placeholder="Separate the tags with commas."
-					onChange={handleTags}
-				/>
-				<Label>Image:</Label>
-				{imgPerc > 0 ? (
-					'Uploading:' + ' ' + imgPerc + '%'
-				) : (
+					<Desc
+						placeholder="Description"
+						name="desc"
+						rows={8}
+						onChange={handleChange}
+					/>
 					<Input
-						type="file"
-						accept="image/*"
-						onChange={(e) => setImg(e.target.files[0])}
+						type="text"
+						placeholder="Separate the tags with commas."
+						onChange={handleTags}
 					/>
-				)}
-				<Button onClick={handleUpload}>Upload</Button>
-			</Wrapper>
-		</Container>
+					<Label>Image:</Label>
+					{imgPerc > 0 ? (
+						'Uploading:' + ' ' + imgPerc + '%'
+					) : (
+						<Input
+							type="file"
+							accept="image/*"
+							onChange={(e) => setImg(e.target.files[0])}
+						/>
+					)}
+					<Button onClick={handleUpload}>Upload</Button>
+				</Wrapper>
+			</Container>
+		</>
 	);
 };
 

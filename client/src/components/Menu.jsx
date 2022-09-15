@@ -29,6 +29,10 @@ const Container = styled.div`
 	left: 0;
 	bottom: 0;
 	overflow-y: scroll;
+
+	@media (max-width: 600px) {
+		width: 75px;
+	}
 `;
 const Wrapper = styled.div`
 	padding: 8px 0;
@@ -46,6 +50,16 @@ const Item = styled.div`
 		background-color: ${({ theme }) => theme.soft};
 		transition: ease-out 0.25s;
 	}
+
+	@media (max-width: 600px) {
+		padding: 15px 15px;
+	}
+`;
+
+const ItemText = styled.text`
+	@media (max-width: 600px) {
+		display: none;
+	}
 `;
 
 const Hr = styled.hr`
@@ -56,6 +70,10 @@ const Hr = styled.hr`
 const Login = styled.div`
 	font-weight: 400;
 	padding: 10px 26px;
+
+	@media (max-width: 600px) {
+		display: none;
+	}
 `;
 
 const Button = styled.button`
@@ -83,12 +101,14 @@ const Title = styled.h2`
 	padding: 0px 26px;
 	color: #aaaaaa;
 	margin-bottom: 10px;
+	@media (max-width: 600px) {
+		display: none;
+	}
 `;
 
 const Credit = styled.p`
 	color: #717171;
 	text-align: center;
-	padding: 10px 0px;
 `;
 
 const Menu = ({ darkMode, setDarkMode }) => {
@@ -100,13 +120,13 @@ const Menu = ({ darkMode, setDarkMode }) => {
 				<Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
 					<Item>
 						<HomeIcon />
-						Home
+						<ItemText>Home</ItemText>
 					</Item>
 				</Link>
 				<Link to="trends" style={{ textDecoration: 'none', color: 'inherit' }}>
 					<Item>
 						<ExploreOutlinedIcon />
-						Explore
+						<ItemText>Explore</ItemText>
 					</Item>
 				</Link>
 				<Link
@@ -115,17 +135,17 @@ const Menu = ({ darkMode, setDarkMode }) => {
 				>
 					<Item>
 						<SubscriptionsOutlinedIcon />
-						Subscriptions
+						<ItemText>Subscriptions</ItemText>
 					</Item>
 				</Link>
 				<Hr />
 				<Item>
 					<VideoLibraryOutlinedIcon />
-					Library
+					<ItemText>Library</ItemText>
 				</Item>
 				<Item>
 					<HistoryOutlinedIcon />
-					History
+					<ItemText>History</ItemText>
 				</Item>
 				<Hr />
 				{!currentUser && (
@@ -145,44 +165,44 @@ const Menu = ({ darkMode, setDarkMode }) => {
 				<Title>EXPLORE</Title>
 				<Item>
 					<LibraryMusicOutlinedIcon />
-					Music
+					<ItemText>Music</ItemText>
 				</Item>
 				<Item>
 					<SportsBasketballOutlinedIcon />
-					Sports
+					<ItemText>Sports</ItemText>
 				</Item>
 				<Item>
 					<SportsEsportsOutlinedIcon />
-					Gaming
+					<ItemText>Gaming</ItemText>
 				</Item>
 				<Item>
 					<MovieOutlinedIcon />
-					Movies
+					<ItemText>Movies</ItemText>
 				</Item>
 				<Item>
 					<ArticleOutlinedIcon />
-					News
+					<ItemText>News</ItemText>
 				</Item>
 				<Item>
 					<LiveTvOutlinedIcon />
-					Live
+					<ItemText>Live</ItemText>
 				</Item>
 				<Hr />
 				<Item>
 					<SettingsOutlinedIcon />
-					Settings
+					<ItemText>Settings</ItemText>
 				</Item>
 				<Item>
 					<FlagOutlinedIcon />
-					Report
+					<ItemText>Report</ItemText>
 				</Item>
 				<Item>
 					<HelpOutlineOutlinedIcon />
-					Help
+					<ItemText>Help</ItemText>
 				</Item>
 				<Item onClick={() => setDarkMode(!darkMode)}>
 					<SettingsBrightnessOutlinedIcon />
-					{darkMode ? 'Light' : 'Dark'} Mode
+					<ItemText>{darkMode ? 'Light' : 'Dark'} Mode</ItemText>
 				</Item>
 				<Hr />
 				<Credit>&#169; 2022 PlayTube LLC</Credit>
