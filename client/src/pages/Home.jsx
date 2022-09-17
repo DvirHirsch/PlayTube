@@ -9,7 +9,6 @@ import IconButton from '@mui/material/IconButton';
 import { Link } from 'react-router-dom';
 
 const Container = styled.div`
-	/* margin-left: 140px; */
 	display: flex;
 	justify-content: center;
 	flex-wrap: wrap;

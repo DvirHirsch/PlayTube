@@ -25,7 +25,6 @@ const Container = styled.div`
 
 const Content = styled.div`
 	flex: 5;
-	/* margin-left: 150px; */
 `;
 const VideoWrapper = styled.div``;
 
@@ -79,12 +78,6 @@ const ChannelInfo = styled.div`
 	gap: 20px;
 `;
 
-// const Image = styled.img`
-// 	width: 50px;
-// 	height: 50px;
-// 	border-radius: 50%;
-// `;
-
 const ChannelDetail = styled.div`
 	display: flex;
 	flex-direction: column;
@@ -127,7 +120,6 @@ const VideoPage = () => {
 	const { currentUser } = useSelector((state) => state.user);
 	const { currentVideo } = useSelector((state) => state.video);
 	const [channel, setChannel] = useState({});
-	// const [commentLists, setCommentLists] = useState([]);
 
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -137,7 +129,6 @@ const VideoPage = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				// currentVideo.views++;
 				const videoRes = await axios.get(`/videos/find/${path}`);
 				const channelRes = await axios.get(
 					`/users/find/${videoRes.data.userId}`
@@ -173,8 +164,6 @@ const VideoPage = () => {
 			: await axios.put(`/users/sub/${channel._id}`);
 		dispatch(subscription(channel._id));
 	};
-
-	//TODO: DELETE VIDEO FUNCTIONALITY
 
 	return (
 		<Container>

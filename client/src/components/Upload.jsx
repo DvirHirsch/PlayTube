@@ -57,6 +57,7 @@ const Input = styled.input`
 	background-color: transparent;
 	z-index: 999;
 `;
+
 const Desc = styled.textarea`
 	border: 1px solid ${({ theme }) => theme.soft};
 	color: ${({ theme }) => theme.text};

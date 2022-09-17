@@ -24,4 +24,5 @@ router.get('/random', random);
 router.get('/sub', verifyToken, sub);
 router.get('/tags', getByTag);
 router.get('/search', search);
+
 export default router;

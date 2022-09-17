@@ -11,7 +11,6 @@ import { useSelector } from 'react-redux';
 import Upload from './Upload';
 import { Tooltip, IconButton } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import axios from 'axios';
 import Avvvatars from 'avvvatars-react';
 import { useRef } from 'react';
 
@@ -176,9 +175,6 @@ const User = styled.div`
 	gap: 10px;
 	font-weight: 500;
 	color: ${({ theme }) => theme.text};
-	/* @media (max-width: 840px) {
-		display: none;
-	} */
 `;
 
 const Navbar = () => {
